@@ -19,7 +19,11 @@ import { MODULE_NAME, MODULE_VERSION } from './version';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import '@ibm/plex/css/ibm-plex.css';
 import '../js/style/dcf-npm.css';
+
+
+
 
 export class DCEFWidgetModel extends DOMWidgetModel {
   defaults(): Backbone.ObjectHash {

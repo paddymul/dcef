@@ -152,7 +152,11 @@ div.dependent-tabs ul.tabs li.active {
 }
 
 .ag-row .ag-cell {
-    font-family: monospace;
+    /*font-family: monospace;*/
+    font-family: 'IBM Plex Mono';
+    /*, 'Menlo', 'DejaVu Sans Mono',
+		 'Bitstream Vera Sans Mono', Courier, monospace;*/
+    color:orange;
     white-space: pre;
 }
 .left-menu {
