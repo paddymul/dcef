@@ -121,3 +121,32 @@ class GroupBy(Command):
     df = q.collect()
         """
         return command_template % (col, full_agg_text, col)
+
+
+
+#filter commands
+def range_filter_df(df, col, lower, upper):
+    clauses = []
+    if lower is not None:
+        clauses.append(pl.col(col).gt(lower))
+    if upper is not None:
+        clauses.append(pl.col(col).lt(upper))
+    return df.filter(*clauses)
+from functools import reduce
+import numpy as np
+def or_join(a,b):
+    return a|b
+def str_filter_df(df, needle):
+    str_cols = df.select(pl.col(pl.String)).columns
+    clauses = [pl.col(c).str.contains(needle) for c in str_cols]
+    orred_clause = reduce(or_join, clauses)
+    return df.filter(orred_clause)
+str_df = pl.DataFrame({
+    'a': ["foo", "foobar", "baz",  None,  None], 
+    'b': [    1,        2,     3,  None,  None], 
+    'c': [ None,     None,  None, "foo", "baz"],
+    'd': np.arange(5),
+    'e': [    2,       -5,    30,     1,    40]
+})
+str_df
+str_filter_df(str_df, "baz")
