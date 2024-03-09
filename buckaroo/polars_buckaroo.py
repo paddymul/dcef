@@ -4,13 +4,18 @@ from .customizations.polars_analysis import PL_Analysis_Klasses
 from .pluggable_analysis_framework.polars_analysis_management import (
     PlDfStats)
 from .serialization_utils import pd_to_obj
-from buckaroo.customizations.polars_commands import (
-    DropCol, FillNA, GroupBy #, OneHot, GroupBy, reindex
-)
+
 from .customizations.styling import DefaultSummaryStatsStyling, DefaultMainStyling
 from .dataflow.dataflow import Sampling
 from .dataflow.autocleaning import Autocleaning
 from .dataflow.widget_extension_utils import configure_buckaroo
+
+from buckaroo.customizations.polars_analysis import (
+    VCAnalysis, PLCleaningStats, BasicAnalysis)
+from buckaroo.customizations.polars_commands import (
+    PlSafeInt, DropCol, FillNA, GroupBy, NoOp
+)
+
 
 class PLSampling(Sampling):
     pre_limit = False
@@ -22,6 +27,24 @@ local_analysis_klasses.extend(
 
 class PolarsAutocleaning(Autocleaning):
     DFStatsKlass = PlDfStats
+
+class CleaningGenOps(ColAnalysis):
+    requires_summary = ['int_parse_fail', 'int_parse']
+    provides_defaults = {'cleaning_ops': []}
+
+    int_parse_threshhold = .3
+    @classmethod
+    def computed_summary(kls, column_metadata):
+        if column_metadata['int_parse'] > kls.int_parse_threshhold:
+            return {'cleaning_ops': [{'symbol': 'safe_int', 'meta':{'auto_clean': True}}, {'symbol': 'df'}]}
+        else:
+            return {'cleaning_ops': []}
+
+
+class ACConf(AutocleaningConfig):
+    autocleaning_analysis_klasses = [VCAnalysis, PLCleaningStats, BasicAnalysis, CleaningGenOps]
+    command_klasses = [PlSafeInt, DropCol, FillNA, GroupBy, NoOp]
+    name="default"
 
     
 class PolarsBuckarooWidget(BuckarooWidget):
