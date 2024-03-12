@@ -9,7 +9,7 @@ from .customizations.styling import DefaultSummaryStatsStyling, DefaultMainStyli
 from .dataflow.dataflow import Sampling
 from .dataflow.autocleaning import Autocleaning
 from .dataflow.widget_extension_utils import configure_buckaroo
-
+from buckaroo.pluggable_analysis_framework.pluggable_analysis_framework import (ColAnalysis)
 from buckaroo.customizations.polars_analysis import (
     VCAnalysis, PLCleaningStats, BasicAnalysis)
 from buckaroo.customizations.polars_commands import (
