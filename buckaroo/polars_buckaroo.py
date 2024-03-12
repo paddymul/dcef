@@ -15,7 +15,7 @@ from buckaroo.customizations.polars_analysis import (
 from buckaroo.customizations.polars_commands import (
     PlSafeInt, DropCol, FillNA, GroupBy, NoOp
 )
-
+from buckaroo.dataflow.autocleaning import AutocleaningConfig
 
 class PLSampling(Sampling):
     pre_limit = False
