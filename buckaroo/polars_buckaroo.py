@@ -1,4 +1,5 @@
 import polars as pl
+from traitlets import Unicode
 from buckaroo.buckaroo_widget import BuckarooWidget, RawDFViewerWidget
 from .customizations.polars_analysis import PL_Analysis_Klasses
 from .pluggable_analysis_framework.polars_analysis_management import (
@@ -40,12 +41,16 @@ class CleaningGenOps(ColAnalysis):
         else:
             return {'cleaning_ops': []}
 
-
+PL_COMMANDS = [PlSafeInt, DropCol, FillNA, GroupBy, NoOp]
 class ACConf(AutocleaningConfig):
     autocleaning_analysis_klasses = [VCAnalysis, PLCleaningStats, BasicAnalysis, CleaningGenOps]
-    command_klasses = [PlSafeInt, DropCol, FillNA, GroupBy, NoOp]
+    command_klasses = PL_COMMANDS
     name="default"
 
+class NoCleaningConfig:
+    command_klasses = PL_COMMANDS
+    autocleaning_analysis_klasses = []
+    name = 'raw'
     
 class PolarsBuckarooWidget(BuckarooWidget):
     """TODO: Add docstring here
@@ -54,6 +59,13 @@ class PolarsBuckarooWidget(BuckarooWidget):
     analysis_klasses = local_analysis_klasses
     DFStatsClass = PlDfStats
     sampling_klass = PLSampling
+    cleaning_method = Unicode('raw')
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ac_obj = PolarsAutocleaning([
+        NoCleaningConfig, ACConf])
 
     def _sd_to_jsondf(self, sd):
         """exists so this can be overriden for polars  """

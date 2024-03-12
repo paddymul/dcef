@@ -101,12 +101,10 @@ class ACConf(AutocleaningConfig):
     command_klasses = PL_COMMANDS
     name="default"
 
-
 class NoCleaningConfig:
     command_klasses = PL_COMMANDS
     autocleaning_analysis_klasses = []
     name = 'raw'
-
 
 
     
@@ -206,5 +204,11 @@ def test_polars_autocleaning_ops():
     two_col_df = pl.DataFrame({'a': ["30", "40"], "b":["foo","bar"]})
     pbw = PolarsBuckarooWidget(two_col_df)
     pbw.existing_operations = DROP_OPS
-    assert len(pbw.cleaned_df.columns) == 1
+    merged_df = pbw.cleaned_df
+    #assert len(merged_df.columns) == 1
+    assert 'a' not in merged_df.columns
+    assert 'b' in merged_df.columns
+    assert pbw.merged_operations == DROP_OPS
+
+    #assert len(pbw.cleaned_df.columns) == 1
     
