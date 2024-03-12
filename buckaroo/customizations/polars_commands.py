@@ -62,8 +62,8 @@ class DropCol(Command):
 
     @staticmethod 
     def transform(df, col):
+        print("dropcol, columns", df.columns)
         return df.drop(col)
-        return df
 
     @staticmethod 
     def transform_to_py(df, col):

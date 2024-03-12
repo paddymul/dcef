@@ -64,7 +64,7 @@ def merge_ops(existing_ops, cleaning_ops):
 def format_ops(column_meta):
     ret_ops = []
     for k,v in column_meta.items():
-        ops = v['cleaning_ops']
+        ops = v.get('cleaning_ops', [])
         if len(ops) > 0:
             temp_ops = ops.copy()
             temp_ops.insert(2, k)
@@ -72,10 +72,17 @@ def format_ops(column_meta):
     return ret_ops
 
 def make_origs(raw_df, cleaned_df):
+    """
+    add back original columns to a polars dataframe
+    """
     clauses = []
     for col in raw_df.columns:
-        clauses.append(cleaned_df[col])
-        clauses.append(raw_df[col].alias(col+"_orig"))
+        if col not in cleaned_df:
+            """ this comes up with dropped columns.  I'm not sure how to handle this case"""
+            pass
+        else:
+            clauses.append(cleaned_df[col])
+            clauses.append(raw_df[col].alias(col+"_orig"))
         # clauses.append(
         #     pl.when((raw_df[col] - cleaned_df[col]).eq(0)).then(None).otherwise(raw_df[col]).alias(col+"_orig"))
     ret_df = cleaned_df.select(clauses)
@@ -85,8 +92,8 @@ def make_origs(raw_df, cleaned_df):
 class AutocleaningConfig:
     command_klasses = [DefaultCommandKlsList]
     autocleaning_analysis_klasses = []
-
     name = 'default'
+
     
 
 class Autocleaning:

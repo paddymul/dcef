@@ -89,8 +89,11 @@ class DataFlow(HasTraits):
     @observe('sampled_df', 'cleaning_method', 'existing_operations')
     @exception_protect('operation_result-protector')
     def _operation_result(self, change):
+        print("self.existing_operations", self.existing_operations)
+
         result = self.ac_obj.handle_ops_and_clean(
             self.sampled_df, self.cleaning_method, self.existing_operations)
+        print("result", result)
         if result is None:
             return
         else:
@@ -358,23 +361,3 @@ class CustomizableDataflow(DataFlow):
 
         self.df_display_args = temp_display_args
    
-"""
-Instantiation
-df_data_dict starts with only 'empty'
-first populate df_display_args, make all data point to 'empty', make all df_viewer_configs EMPTY_DFVIEWER_CONFIG
-
-then populate buckaroo_options['df_display'] from gathered classes
-
-Next add 'all_stats' to 'df_data_dict'
-add 'main' to 'df_data_dict'
-
-
-all of the above steps might trigger redisplays, but they will be cheap because df_viewer_config will be empty, pointing at empty data
-
-finally iterate through all 'df_display' analysis_klasses and update df_display_args
-
-
-
-
-
-"""

@@ -67,6 +67,14 @@ def test_format_ops():
         [{'symbol': 'replace_dirty', 'meta':{'auto_clean': True}}, {'symbol': 'df'}, 'b', '\n', None]]
     assert format_ops(column_meta) == expected_ops
 
+def test_format_ops_no_ops():
+    column_meta = {
+        'a': {},
+        'b': {}}
+
+    expected_ops = []
+    assert format_ops(column_meta) == expected_ops
+
 
 def test_merge_ops():
     existing_ops = [
@@ -85,16 +93,27 @@ def test_merge_ops():
     print("@"*80)
     assert merge_ops(existing_ops, cleaning_ops) == expected_merged
 
+
+PL_COMMANDS = [PlSafeInt, DropCol, FillNA, GroupBy, NoOp]
+
 class ACConf(AutocleaningConfig):
     autocleaning_analysis_klasses = [VCAnalysis, PLCleaningStats, BasicAnalysis, CleaningGenOps]
-    command_klasses = [PlSafeInt, DropCol, FillNA, GroupBy, NoOp]
+    command_klasses = PL_COMMANDS
     name="default"
+
+
+class NoCleaningConfig:
+    command_klasses = PL_COMMANDS
+    autocleaning_analysis_klasses = []
+    name = 'raw'
+
 
 
     
 def test_handle_user_ops():
 
-    ac = PolarsAutocleaning([ACConf])
+    ac = PolarsAutocleaning([
+        NoCleaningConfig, ACConf])
     df = pl.DataFrame({'a': [10, 20, 30]})
     cleaning_result = ac.handle_ops_and_clean(df, cleaning_method='default', existing_operations=[])
     cleaned_df, cleaning_sd, generated_code, merged_operations = cleaning_result
@@ -164,3 +183,28 @@ def test_autoclean_codegen():
     cleaned_df, cleaning_sd, generated_code, merged_operations = cleaning_result
 
     assert generated_code == EXPECTED_GEN_CODE
+
+
+DROP_OPS = [[{'symbol': 'dropcol'}, {'symbol': 'df'}, 'a']]
+
+def test_raw_handle():
+    two_col_df = pl.DataFrame({'a': ["30", "40"], "b":["foo","bar"]})
+    #pbw = PolarsBuckarooWidget(two_col_df)
+    #ac_obj = pbw.ac_obj
+    ac_obj = PolarsAutocleaning([NoCleaningConfig])
+    result = ac_obj.handle_ops_and_clean(
+        two_col_df, 'raw', DROP_OPS)
+    merged_df, _unused_sd, _gen_code, merged_ops = result
+    #assert len(merged_df.columns) == 1
+    assert 'a' not in merged_df.columns
+    assert 'b' in merged_df.columns
+    assert merged_ops == DROP_OPS
+    #assert result == []
+
+def test_polars_autocleaning_ops():
+    from buckaroo.polars_buckaroo import PolarsBuckarooWidget
+    two_col_df = pl.DataFrame({'a': ["30", "40"], "b":["foo","bar"]})
+    pbw = PolarsBuckarooWidget(two_col_df)
+    pbw.existing_operations = DROP_OPS
+    assert len(pbw.cleaned_df.columns) == 1
+    
