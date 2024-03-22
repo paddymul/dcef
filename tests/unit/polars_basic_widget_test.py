@@ -160,7 +160,7 @@ def test_weird():
         'histo': [
             [{'name': 'NA', 'NA': 100.0}],
             [{'name': 1, 'cat_pop': 46.0}, {'name': 'NA', 'NA': 54.0}]]}
-    pl_histo = pl.DataFrame(RAW)
+    pl_histo = pl.DataFrame(RAW, strict=False)
         
     PolarsBuckarooWidget(pl_histo)
 
