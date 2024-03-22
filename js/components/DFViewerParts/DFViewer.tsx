@@ -102,6 +102,7 @@ export function DFViewer({
       type: 'fitCellContents',
     };
   };
+  const inIframe = window.parent !== window;
 
   const dfvHeight =
     window.innerHeight /
@@ -114,7 +115,6 @@ export function DFViewer({
     minHeight: 50,
     maxHeight: dfvHeight,
   };
-  const inIframe = window.parent !== window;
 
   const belowMinRows = agData.length + df_viewer_config.pinned_rows.length < 10;
   const shortMode =
