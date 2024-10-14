@@ -18,6 +18,8 @@ const performance = {
   maxAssetSize: 100_000_000,
 };
 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const devMode = process.env.NODE_ENV !== 'production';
 // Custom webpack rules
 const rules = [
   { test: /\.tsx?$/, loader: 'ts-loader' },
@@ -56,7 +58,7 @@ const externals = ['@jupyter-widgets/base'];
 const resolve = {
   // Add '.ts' and '.tsx' as resolvable extensions.
   extensions: ['.webpack.js', '.web.js', '.ts', '.js', '.tsx'],
-  plugins: [new TsconfigPathsPlugin()],
+    plugins: [new TsconfigPathsPlugin()],
   fallback: { crypto: false },
 };
 
@@ -76,7 +78,6 @@ module.exports = [
     output: {
       filename: 'index.js',
       path: path.resolve(__dirname, 'dist'),
-      libraryTarget: 'amd',
       library: 'buckaroo',
       publicPath: 'https://unpkg.com/buckaroo@' + version + '/dist/',
     },
@@ -86,6 +87,9 @@ module.exports = [
     },
     externals,
     resolve,
+    plugins: [
+      new MiniCssExtractPlugin()
+    ],
     devServer: {
       port: 8030,
     },

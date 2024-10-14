@@ -1,5 +1,5 @@
 // https://plnkr.co/edit/QTNwBb2VEn81lf4t?open=index.tsx
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import _ from 'lodash';
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import { ColDef, GridOptions } from 'ag-grid-community';
@@ -178,7 +178,6 @@ export function StatusBar({
 
   const gridRef = useRef<AgGridReact<unknown>>(null);
   const defaultColDef = {
-    //    type: 'left-aligned',
     cellStyle: { textAlign: 'left' },
   };
   return (
@@ -194,39 +193,5 @@ export function StatusBar({
         ></AgGridReact>
       </div>
     </div>
-  );
-}
-export function StatusBarEx() {
-  const dfm: DFMeta = {
-    columns: 5,
-    rows_shown: 20,
-    filtered_rows: 300_000,
-    total_rows: 8_777_444,
-  };
-
-  const [bState, setBState] = useState<BuckarooState>({
-    auto_clean: 'conservative',
-    sampled: false,
-    df_display: 'main',
-    post_processing: 'asdf',
-    show_commands: false,
-    search_string: '',
-  });
-
-  const bOptions: BuckarooOptions = {
-    auto_clean: ['aggressive', 'conservative'],
-    post_processing: ['', 'asdf'],
-    sampled: ['random'],
-    show_commands: ['on'],
-    df_display: ['main'],
-  };
-
-  return (
-    <StatusBar
-      dfMeta={dfm}
-      buckarooState={bState}
-      setBuckarooState={setBState}
-      buckarooOptions={bOptions}
-    />
   );
 }
