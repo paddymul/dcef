@@ -19,7 +19,7 @@ import { MODULE_NAME, MODULE_VERSION } from './version';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import '../js/style/dcf-npm.css';
+import './style/dcf-npm.css';
 import { DFViewer } from './components/DFViewerParts/DFViewer';
 
 export class DCEFWidgetModel extends DOMWidgetModel {

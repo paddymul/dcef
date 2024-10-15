@@ -9,3 +9,5 @@ twine check dist/*
 #python -m twine upload --repository testpypi dist/*
 #python -m twine upload --repository pypi dist/*
 #npm publish
+
+#npm publish --tag next  # to publish a test branch

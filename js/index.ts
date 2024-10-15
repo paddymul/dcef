@@ -1,4 +1,4 @@
-// Copyright (c) Bloomberg
+// Copyright (c) Paddy Mullen
 // Distributed under the terms of the Modified BSD License.
 
 import { ColumnsEditor, ColumnsEditorEx } from './components/ColumnsEditor';
@@ -8,9 +8,9 @@ import { HistogramCell } from './components/DFViewerParts/HistogramCell';
 import { DependentTabs } from './components/DependentTabs';
 import { OperationViewer } from './components/Operations';
 //import { DFData, DFViewerConfig } from './components/DFViewerParts/DFWhole';
-import { StatusBarEx } from './components/StatusBar';
+import { StatusBar } from './components/StatusBar';
+//import { StatusBarEx } from './components/StatusBar';
 
-// In case of classic Jupyter Notebook and embed, we provide the PhosphorJS CSS
 
 export * from './version';
 export * from './dcefwidget';
@@ -24,13 +24,7 @@ export const extraComponents = {
   ColumnsEditorEx,
   DFViewer,
   DFViewerEx,
-  StatusBarEx,
+  StatusBar,
   HistogramCell,
 };
 
-/*
-export const typing = { 
-    DFData, 
-    DFViewerConfig
- };
-*/
