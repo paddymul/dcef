@@ -112,7 +112,7 @@ export function StatusBar({
         buckarooState.search_string,
         localSetSearchString
       ),
-      hide: !showSearch,
+      sortable: false,
     },
 
     {
@@ -174,6 +174,12 @@ export function StatusBar({
 
   const gridOptions: GridOptions = {
     suppressRowClickSelection: true,
+    onColumnHeaderClicked: (event) => {
+      console.log('header clicked', event);
+    },
+    onSortChanged: (event) => {
+      console.log('sort changed', event);
+    },
   };
 
   const gridRef = useRef<AgGridReact<unknown>>(null);
