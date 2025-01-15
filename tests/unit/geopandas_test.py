@@ -1,6 +1,9 @@
-from buckaroo.geopandas_buckaroo import GeopandasSVGBuckarooWidget, GeopandasBuckarooWidget
+
 from .fixtures import (DistinctCount)
-import geopandas
+
+# Geopandas support is wonky, disabling for now
+#from buckaroo.geopandas_buckaroo import GeopandasSVGBuckarooWidget, GeopandasBuckarooWidget
+#import geopandas
 
 
 

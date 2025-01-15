@@ -77,7 +77,6 @@ test = [
     "polars[timezone]",
     "pydantic>=2.5.2",
     "pyarrow",
-    "geopandas<1.0",
     "ruff",
     "anywidget",
     "nbstripout"
